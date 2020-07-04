@@ -6,6 +6,8 @@ public class PipelineManger : MonoBehaviour
 
     public GameObject pipelineTemplate;
 
+    public float delay = 3f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,7 +42,7 @@ public class PipelineManger : MonoBehaviour
         {
             GeneratePipeline();
 
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(delay);
         }
     }
 
