@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class Game : MonoBehaviour
@@ -22,6 +23,8 @@ public class Game : MonoBehaviour
 
     public PipelineManger pipelineManger;
 
+    public Player player;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,8 +41,9 @@ public class Game : MonoBehaviour
     public void startGame()
     {
         this.status = GameStatus.IN_GAME;
-        pipelineManger.startRun();
         Debug.Log(string.Format("start Game ... {0}", this.Status.ToString()));
+        pipelineManger.startRun();
+        player.updateStatus(Player.PlayerStatus.FLY);
     }
 
     public void updateUI()

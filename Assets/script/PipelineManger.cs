@@ -24,7 +24,6 @@ public class PipelineManger : MonoBehaviour
 
     public void startRun()
     {
-
         // 开启一个协程 生成管道
         coroutine = StartCoroutine(GeneratePipelines());
     }
@@ -42,6 +41,7 @@ public class PipelineManger : MonoBehaviour
         {
             GeneratePipeline();
 
+            // 等待delay 后执行
             yield return new WaitForSeconds(delay);
         }
     }
