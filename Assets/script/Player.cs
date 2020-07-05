@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
@@ -9,6 +8,16 @@ public class Player : MonoBehaviour
 
     public float force = 100;
 
+    public delegate void PlayerDeath();
+
+    public event PlayerDeath onDeath;
+
+    public UnityAction<int> onScore;
+
+
+    private Vector3 initVector;
+
+    private static string SCORE_AREA = "ScoreArea";
 
     public enum PlayerStatus
     {
@@ -24,12 +33,13 @@ public class Player : MonoBehaviour
     void Start()
     {
         this.updateStatus(PlayerStatus.IDLE);
+        this.initVector = this.gameObject.transform.localPosition;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (this.status == PlayerStatus.IDLE)
+        if (this.status != PlayerStatus.FLY)
         {
             return;
         }
@@ -42,14 +52,43 @@ public class Player : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D col)
     {
-        //Debug.Log("GameObject1 collided with " + col.name);
-        this.updateStatus(PlayerStatus.IDLE);
+        if (this.status != PlayerStatus.FLY)
+        {
+            return;
+        }
+        
+        //Debug.Log("GameObject1 TriggerEnter with " + col.name);
+        if (col.name.Equals(SCORE_AREA))
+        {
+            return;
+        }
+        
+        this.updateStatus(PlayerStatus.DIE);
     }
+
+
+    public void OnTriggerExit2D(Collider2D col)
+    {
+        if (this.status != PlayerStatus.FLY)
+        {
+            return;
+        }
+        //Debug.Log("GameObject1 TriggerExit with " + col.name);
+        if (col.name.Equals(SCORE_AREA))
+        {
+            this.onScore?.Invoke(1);
+            return;
+        }
+
+       
+        this.updateStatus(PlayerStatus.DIE);
+    }
+
 
     public void OnCollisionEnter2D(Collision2D col)
     {
         //Debug.Log("OnCollisionEnter2D Collision with " + col.collider.name);
-        this.updateStatus(PlayerStatus.IDLE);
+        this.updateStatus(PlayerStatus.DIE);
     }
 
     public void updateStatus(PlayerStatus status)
@@ -63,15 +102,18 @@ public class Player : MonoBehaviour
                 break;
 
             case PlayerStatus.FLY:
+                this.transform.localPosition = this.initVector;
                 this.rigidbodyBird.WakeUp();
                 this.anim.SetTrigger("Fly");
                 break;
 
             case PlayerStatus.DIE:
                 this.anim.SetTrigger("Die");
+                this.onDeath?.Invoke();
                 break;
 
             default:
+                this.rigidbodyBird.Sleep();
                 this.anim.SetTrigger("Idle");
                 break;
         }
