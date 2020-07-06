@@ -41,10 +41,10 @@ public class Game : MonoBehaviour
 #if UNITY_STANDALONE
     Screen.SetResolution(720, 1280, false);
 #endif
-
         this.status = GameStatus.ON_READY;
         this.player.onDeath += Player_onDeath;
         this.player.onScore = Player_Score;
+        this.bestScore.text = PlayerPrefs.GetInt("best",0).ToString();
     }
 
     private void Player_Score(int score)
@@ -112,6 +112,7 @@ public class Game : MonoBehaviour
             if (Convert.ToInt32(bestScore.text) < score)
             {
                 this.bestScore.text = score.ToString();
+                PlayerPrefs.SetInt("best", score);
             }
         }
     }
