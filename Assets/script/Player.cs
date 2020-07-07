@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Events;
 
 public class Player : MonoBehaviour
@@ -14,10 +16,13 @@ public class Player : MonoBehaviour
 
     public UnityAction<int> onScore;
 
-
     private Vector3 initVector;
 
     private static string SCORE_AREA = "ScoreArea";
+
+    private AudioSource audiosource;
+
+    private Dictionary<string, AudioClip> audios = new Dictionary<string, AudioClip>();
 
     public enum PlayerStatus
     {
@@ -33,7 +38,19 @@ public class Player : MonoBehaviour
     void Start()
     {
         this.updateStatus(PlayerStatus.IDLE);
+        this.audiosource = this.GetComponent<AudioSource>();
         this.initVector = this.gameObject.transform.localPosition;
+        this.loadAudioClips();
+    }
+
+
+    private void loadAudioClips()
+    {
+        audios.Add("die", (AudioClip)Resources.Load("audios/sfx_die"));
+        audios.Add("hit", (AudioClip)Resources.Load("audios/sfx_hit"));
+        audios.Add("point", (AudioClip)Resources.Load("audios/sfx_point"));
+        audios.Add("swooshing", (AudioClip)Resources.Load("audios/sfx_swooshing"));
+        audios.Add("wing", (AudioClip)Resources.Load("audios/sfx_wing"));
     }
 
     // Update is called once per frame
@@ -46,6 +63,7 @@ public class Player : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
+            this.playAudio("wing");
             rigidbodyBird.velocity = Vector2.zero;
             rigidbodyBird.AddForce(new Vector2(0, force));
             this.transform.eulerAngles = new Vector3(0, 0, 30);
@@ -68,7 +86,8 @@ public class Player : MonoBehaviour
         {
             return;
         }
-        
+
+        this.playAudio("hit");
         this.updateStatus(PlayerStatus.DIE);
     }
 
@@ -83,6 +102,7 @@ public class Player : MonoBehaviour
         if (col.name.Equals(SCORE_AREA))
         {
             this.onScore?.Invoke(1);
+            this.playAudio("point");
             return;
         }
 
@@ -93,8 +113,24 @@ public class Player : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D col)
     {
-        //Debug.Log("OnCollisionEnter2D Collision with " + col.collider.name);
+        // Debug.Log("OnCollisionEnter2D Collision with " + col.collider.name);
         this.updateStatus(PlayerStatus.DIE);
+    }
+
+
+    public void playAudio(string audioName)
+    {
+        if (audiosource.isPlaying)
+        {
+            audiosource.Stop();
+        }
+
+        AudioClip clip = audios[audioName];
+        if (clip != null)
+        {
+            audiosource.clip = clip;
+            audiosource.Play();
+        }
     }
 
     public void updateStatus(PlayerStatus status)

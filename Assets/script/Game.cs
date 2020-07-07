@@ -69,7 +69,8 @@ public class Game : MonoBehaviour
     {
         this.Score = 0;
         this.status = GameStatus.IN_GAME;
-        Debug.Log(string.Format("start Game ... {0}", this.Status.ToString()));
+        this.player.playAudio("swooshing");
+        // Debug.Log(string.Format("start Game ... {0}", this.Status.ToString()));
         pipelineManger.startRun();
         player.updateStatus(Player.PlayerStatus.FLY);
     }
