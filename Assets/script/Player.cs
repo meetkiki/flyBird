@@ -44,9 +44,15 @@ public class Player : MonoBehaviour
             return;
         }
 
-        if (Input.GetMouseButtonDown(0)){
+        if (Input.GetMouseButtonDown(0))
+        {
             rigidbodyBird.velocity = Vector2.zero;
             rigidbodyBird.AddForce(new Vector2(0, force));
+            this.transform.eulerAngles = new Vector3(0, 0, 30);
+        }
+        else
+        {
+            this.transform.Rotate(0,0,-1);
         }
     }
 
