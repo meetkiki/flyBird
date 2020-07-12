@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Events;
 
 public class Player : MonoBehaviour
@@ -6,7 +7,10 @@ public class Player : MonoBehaviour
     public Rigidbody2D rigidbodyBird;
     public Animator anim;
 
-    public float force = 100;
+    // public float force = 100;
+    public float speed = 10f;
+
+    public float fireSpeed = 10f;
 
     public delegate void PlayerDeath();
 
@@ -14,6 +18,7 @@ public class Player : MonoBehaviour
 
     public UnityAction<int> onScore;
 
+    public GameObject buttetTemplate;
 
     private Vector3 initVector;
 
@@ -44,15 +49,53 @@ public class Player : MonoBehaviour
             return;
         }
 
-        if (Input.GetMouseButtonDown(0))
+        // 移动
+        registerMove();
+
+        // 开火
+        registerFire();
+    }
+
+    float fireTimer = 0f;
+
+    private void registerFire()
+    {
+        fireTimer += Time.deltaTime;
+
+        if (fireTimer > (1 / fireSpeed) && Input.GetButton("Fire bullets"))
         {
-            rigidbodyBird.velocity = Vector2.zero;
-            rigidbodyBird.AddForce(new Vector2(0, force));
-            this.transform.eulerAngles = new Vector3(0, 0, 30);
+            GameObject bullte = Instantiate(buttetTemplate);
+            bullte.transform.position = new Vector3(this.transform.position.x, this.transform.position.y);
+
+            fireTimer = 0;
+        }
+    }
+
+    private void registerMove()
+    {
+        // 纵向
+        float vertical = Input.GetAxis("Vertical") * speed * Time.deltaTime;
+        // 横向
+        float horizontal = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
+
+        this.transform.position += new Vector3(horizontal, vertical, 0);
+
+        if (vertical == 0 || horizontal != 0)
+        {
+            // 角度清0
+            this.transform.eulerAngles = new Vector3(0, 0, 0);
+            return;
+        }
+
+        float elevation = 10;
+
+        if (vertical > 0)
+        {
+            this.transform.eulerAngles = new Vector3(0, 0, elevation);
         }
         else
         {
-            this.transform.Rotate(0,0,-1);
+            this.transform.eulerAngles = new Vector3(0, 0, -elevation);
         }
     }
 
@@ -69,7 +112,7 @@ public class Player : MonoBehaviour
             return;
         }
         
-        this.updateStatus(PlayerStatus.DIE);
+        //this.updateStatus(PlayerStatus.DIE);
     }
 
 
@@ -87,14 +130,14 @@ public class Player : MonoBehaviour
         }
 
        
-        this.updateStatus(PlayerStatus.DIE);
+        //this.updateStatus(PlayerStatus.DIE);
     }
 
 
     public void OnCollisionEnter2D(Collision2D col)
     {
         //Debug.Log("OnCollisionEnter2D Collision with " + col.collider.name);
-        this.updateStatus(PlayerStatus.DIE);
+        //this.updateStatus(PlayerStatus.DIE);
     }
 
     public void updateStatus(PlayerStatus status)

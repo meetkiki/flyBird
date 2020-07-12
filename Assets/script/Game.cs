@@ -36,11 +36,6 @@ public class Game : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
-
-#if UNITY_STANDALONE
-    Screen.SetResolution(720, 1280, false);
-#endif
         this.status = GameStatus.ON_READY;
         this.player.onDeath += Player_onDeath;
         this.player.onScore = Player_Score;
