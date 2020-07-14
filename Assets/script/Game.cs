@@ -66,7 +66,7 @@ public class Game : MonoBehaviour
         this.status = GameStatus.IN_GAME;
         Debug.Log(string.Format("start Game ... {0}", this.Status.ToString()));
         pipelineManger.startRun();
-        player.updateStatus(Player.PlayerStatus.FLY);
+        player.updateStatus(Player.BirdStatus.FLY);
     }
 
     public void updateUI()
