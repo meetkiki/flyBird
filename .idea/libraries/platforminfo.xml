@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="platforminfo">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/Library/PackageCache/com.unity.analytics@3.0.9/Android/platforminfo.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
