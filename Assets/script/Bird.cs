@@ -53,7 +53,7 @@ public abstract class Bird : MonoBehaviour
         registerFire();
     }
 
-    float fireTimer = 0f;
+    protected float fireTimer = 0f;
 
     public abstract void registerFire();
 

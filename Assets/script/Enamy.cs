@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Enamy : Bird
 {
+
     public override void registerFire()
     {
         
@@ -12,6 +13,6 @@ public class Enamy : Bird
 
     public override void registerMove()
     {
-        
+        this.transform.position += new Vector3(-Time.deltaTime * speed,0,0);
     }
 }

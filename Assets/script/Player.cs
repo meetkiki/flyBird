@@ -6,8 +6,6 @@ public class Player : Bird
 {
     private static string SCORE_AREA = "ScoreArea";
 
-    float fireTimer = 0f;
-
     public override void registerFire()
     {
         fireTimer += Time.deltaTime;
