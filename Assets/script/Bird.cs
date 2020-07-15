@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.script;
+using UnityEngine;
 using UnityEngine.Events;
 using static Player;
 
@@ -32,14 +33,15 @@ public abstract class Bird : MonoBehaviour
     public BirdStatus status;
 
     // Start is called before the first frame update
-    public void Start()
+    public virtual void Start()
     {
-        this.updateStatus(BirdStatus.FLY);
+        this.updateStatus(BirdStatus.IDLE);
         this.initVector = this.gameObject.transform.localPosition;
     }
 
+
     // Update is called once per frame
-    public void Update()
+    public virtual void Update()
     {
         if (this.status != BirdStatus.FLY)
         {
@@ -88,5 +90,45 @@ public abstract class Bird : MonoBehaviour
                 break;
         }
 
+    }
+
+    public virtual void init()
+    {
+        if (this.initVector != null)
+        {
+            this.gameObject.transform.localPosition = this.initVector;
+        }
+    }
+
+    public virtual void Stop()
+    {
+        this.updateStatus(BirdStatus.DIE);
+    }
+
+
+    public virtual void OnTriggerEnter2D(Collider2D col)
+    {
+        if (this.status != BirdStatus.FLY)
+        {
+            return;
+        }
+
+        Buttet buttet = col.gameObject.GetComponent<Buttet>();
+        if (buttet == null)
+        {
+            return;
+        }
+
+        Debug.Log("OnTriggerEnter2D Collision with " + col.name);
+
+        if (checkDie(buttet))
+        {
+            this.updateStatus(BirdStatus.DIE);
+        }
+    }
+
+    public virtual bool checkDie(Buttet buttet)
+    {
+        return buttet.side == Side.ENAMY;
     }
 }

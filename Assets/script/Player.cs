@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Assets.script;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class Player : Bird
 {
     private static string SCORE_AREA = "ScoreArea";
+
+    public int areaFrame = 5;
 
     public override void registerFire()
     {
@@ -25,6 +28,10 @@ public class Player : Bird
         float vertical = Input.GetAxis("Vertical") * speed * Time.deltaTime;
         // 横向
         float horizontal = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
+
+        Vector3 position = Camera.main.WorldToScreenPoint(this.transform.position);
+
+        checkPosition(ref vertical, ref horizontal, position);
 
         this.transform.position += new Vector3(horizontal, vertical, 0);
 
@@ -47,43 +54,30 @@ public class Player : Bird
         }
     }
 
-    public void OnTriggerEnter2D(Collider2D col)
+    private void checkPosition(ref float vertical, ref float horizontal, Vector3 position)
     {
-        if (this.status != BirdStatus.FLY)
+        if (position.x < (Screen.safeArea.xMin + areaFrame) && horizontal < 0)
         {
-            return;
+            horizontal = 0;
         }
-        
-        //Debug.Log("GameObject1 TriggerEnter with " + col.name);
-        if (col.name.Equals(SCORE_AREA))
+        if (position.x > (Screen.safeArea.xMax - areaFrame) && horizontal > 0)
         {
-            return;
+            horizontal = 0;
         }
-        
-        //this.updateStatus(PlayerStatus.DIE);
-    }
-
-
-    public void OnTriggerExit2D(Collider2D col)
-    {
-        if (this.status != BirdStatus.FLY)
+        if (position.y < (Screen.safeArea.yMin + areaFrame) && vertical < 0)
         {
-            return;
+            vertical = 0;
         }
-        //Debug.Log("GameObject1 TriggerExit with " + col.name);
-        if (col.name.Equals(SCORE_AREA))
+        if (position.y > (Screen.safeArea.yMax - 2 * areaFrame) && vertical > 0)
         {
-            this.onScore?.Invoke(1);
-            return;
+            vertical = 0;
         }
-
-        //this.updateStatus(PlayerStatus.DIE);
     }
 
 
     public void OnCollisionEnter2D(Collision2D col)
     {
-        //Debug.Log("OnCollisionEnter2D Collision with " + col.collider.name);
+        Debug.Log("OnCollisionEnter2D Collision with " + col.collider.name);
         //this.updateStatus(PlayerStatus.DIE);
     }
 }

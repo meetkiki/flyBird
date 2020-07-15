@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,6 +23,8 @@ public class Game : MonoBehaviour
 
     public PipelineManger pipelineManger;
 
+    public BirdManager birdManager;
+
     public Player player;
 
     public List<Text> uiScores = new List<Text>();
@@ -39,7 +39,7 @@ public class Game : MonoBehaviour
         this.status = GameStatus.ON_READY;
         this.player.onDeath += Player_onDeath;
         this.player.onScore = Player_Score;
-        this.bestScore.text = PlayerPrefs.GetInt("best",0).ToString();
+        this.bestScore.text = PlayerPrefs.GetInt("best",0).ToString(); 
     }
 
     private void Player_Score(int score)
@@ -51,6 +51,7 @@ public class Game : MonoBehaviour
     {
         this.status = GameStatus.GAME_OVER;
         pipelineManger.stopRun();
+        birdManager.stopRun();
     }
 
     // Update is called once per frame
@@ -66,6 +67,7 @@ public class Game : MonoBehaviour
         this.status = GameStatus.IN_GAME;
         Debug.Log(string.Format("start Game ... {0}", this.Status.ToString()));
         pipelineManger.startRun();
+        birdManager.startRun();
         player.updateStatus(Player.BirdStatus.FLY);
     }
 

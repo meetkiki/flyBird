@@ -21,7 +21,7 @@ public class Pipeline : MonoBehaviour
 
     public void init(int x)
     {
-        float y = UnityEngine.Random.Range(maxLow, maxHight);
+        float y = Random.Range(maxLow, maxHight);
         this.transform.localPosition = new Vector3(x, y, 0);
         this.running = true;
     }
