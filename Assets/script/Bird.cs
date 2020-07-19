@@ -1,4 +1,5 @@
-﻿using Assets.script;
+﻿using System;
+using Assets.script;
 using UnityEngine;
 using UnityEngine.Events;
 using static Player;
@@ -13,7 +14,9 @@ public abstract class Bird : MonoBehaviour
 
     public float fireSpeed = 10f;
 
-    public delegate void BirdDeath();
+    public float collisionHurt = 10;
+
+    public delegate void BirdDeath(Bird brid);
 
     public event BirdDeath onDeath;
 
@@ -22,6 +25,8 @@ public abstract class Bird : MonoBehaviour
     public GameObject buttetTemplate;
 
     public Vector3 initVector;
+
+    public Side side;
 
     public enum BirdStatus
     {
@@ -35,6 +40,7 @@ public abstract class Bird : MonoBehaviour
     // Start is called before the first frame update
     public virtual void Start()
     {
+        this.init();
         this.updateStatus(BirdStatus.IDLE);
         this.initVector = this.gameObject.transform.localPosition;
     }
@@ -80,8 +86,7 @@ public abstract class Bird : MonoBehaviour
                 break;
 
             case BirdStatus.DIE:
-                this.anim.SetTrigger("Die");
-                this.onDeath?.Invoke();
+                this.die();
                 break;
 
             default:
@@ -89,7 +94,12 @@ public abstract class Bird : MonoBehaviour
                 this.anim.SetTrigger("Idle");
                 break;
         }
+    }
 
+    public virtual void die()
+    {
+        this.anim.SetTrigger("Die");
+        this.onDeath?.Invoke(this);
     }
 
     public virtual void init()
@@ -106,7 +116,7 @@ public abstract class Bird : MonoBehaviour
     }
 
 
-    public virtual void OnTriggerEnter2D(Collider2D col)
+    public void OnTriggerEnter2D(Collider2D col)
     {
         if (this.status != BirdStatus.FLY)
         {
@@ -114,20 +124,30 @@ public abstract class Bird : MonoBehaviour
         }
 
         Buttet buttet = col.gameObject.GetComponent<Buttet>();
-        if (buttet == null)
+        if (buttet != null)
         {
-            return;
+            // Debug.Log("OnTriggerEnter2D Collision with " + col.name);
+
+            this.shot(buttet);
         }
 
-        Debug.Log("OnTriggerEnter2D Collision with " + col.name);
+        this.triggerEnter2D(col);
+    }
 
-        if (checkDie(buttet))
+    public virtual void triggerEnter2D(Collider2D col)
+    {
+
+    }
+
+    public virtual void shot(Buttet buttet)
+    {
+        if (checkShot(buttet))
         {
             this.updateStatus(BirdStatus.DIE);
         }
     }
 
-    public virtual bool checkDie(Buttet buttet)
+    public virtual bool checkShot(Buttet buttet)
     {
         return buttet.side == Side.ENAMY;
     }

@@ -8,26 +8,11 @@ public class Buttet : MonoBehaviour
 
     public Side side;
 
+    public float buttetHurt = 10;
+
     private int dir = 1;
 
-    public int Dir
-    {
-        get
-        {
-            return dir;
-        }
 
-        set
-        {
-            dir = value;
-        }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -40,6 +25,30 @@ public class Buttet : MonoBehaviour
         {
             Destroy(this.gameObject, 0.5f);
         }
+    }
 
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        Buttet buttet = collision.gameObject.GetComponent<Buttet>();
+
+        if (buttet != null)
+        {
+            Destroy(buttet.gameObject);
+        }
+    }
+
+
+    public int Dir
+    {
+        get
+        {
+            return dir;
+        }
+
+        set
+        {
+            dir = value;
+        }
     }
 }

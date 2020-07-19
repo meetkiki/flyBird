@@ -2,12 +2,24 @@
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class Player : Bird
 {
     private static string SCORE_AREA = "ScoreArea";
 
     public int areaFrame = 5;
+
+    public float playerHp = 1000;
+
+    public Slider slider;
+
+    public override void init()
+    {
+        slider.maxValue = playerHp;
+        slider.value = playerHp;
+    }
+
 
     public override void registerFire()
     {
@@ -74,6 +86,45 @@ public class Player : Bird
         }
     }
 
+    public override void shot(Buttet buttet)
+    {
+        if (buttet.side == Side.ENAMY)
+        {
+            this.updateHp(buttet.buttetHurt);
+        }
+    }
+
+    private void updateHp(float hurt)
+    {
+        this.playerHp -= hurt;
+
+        if (this.playerHp <= 0)
+        {
+            this.updateStatus(BirdStatus.DIE);
+        }
+    }
+
+    public override void triggerEnter2D(Collider2D col)
+    {
+        Bird bird = col.gameObject.GetComponent<Bird>();
+        if (bird != null && bird.side == Side.ENAMY)
+        {
+            Debug.Log("OnTriggerEnter2D Collision with " + bird.name);
+
+            this.shotEnamy(bird);
+        }
+    }
+
+    public void shotEnamy(Bird bird)
+    {
+        this.updateHp(bird.collisionHurt);
+    }
+
+    public override void Update()
+    {
+        base.Update();
+        this.slider.value = Mathf.Lerp(this.slider.value, this.playerHp, Time.deltaTime);
+    }
 
     public void OnCollisionEnter2D(Collision2D col)
     {

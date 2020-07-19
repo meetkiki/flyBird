@@ -168,8 +168,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5400737628529316962}
   - component: {fileID: 5400737628529316963}
-  - component: {fileID: 5400737628529316964}
   - component: {fileID: 4301809952541772799}
+  - component: {fileID: 1817699930004214088}
   m_Layer: 0
   m_Name: Enamy
   m_TagString: Untagged
@@ -185,7 +185,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5400737628529316961}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 11.8, y: 0, z: 0}
+  m_LocalPosition: {x: 11.823, y: 0, z: 0}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children:
   - {fileID: 5400737628560737806}
@@ -213,37 +213,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!68 &5400737628529316964
-EdgeCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5400737628529316961}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_EdgeRadius: 0
-  m_Points:
-  - {x: -0.5036407, y: 0.17475379}
-  - {x: -0.32306555, y: 0.3914792}
-  - {x: -0.083328485, y: 0.45202816}
-  - {x: 0.06125631, y: 0.38813633}
-  - {x: 0.15476346, y: 0.42723772}
-  - {x: 0.28318992, y: 0.36069098}
-  - {x: 0.29500294, y: 0.18829495}
-  - {x: 0.4527097, y: 0.10096106}
-  - {x: 0.36509907, y: -0.012730092}
-  - {x: 0.16952766, y: -0.03924966}
-  - {x: -0.14588587, y: -0.15926614}
-  - {x: -0.37635365, y: -0.111935854}
-  - {x: -0.44104704, y: 0.005371362}
-  - {x: -0.5409441, y: 0.111756764}
-  - {x: -0.50119346, y: 0.17475379}
 --- !u!114 &4301809952541772799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,14 +228,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidbodyBird: {fileID: 5400737628529316963}
   anim: {fileID: 5400737628560737804}
-  speed: 5
+  speed: 3
   fireSpeed: 2
+  collisionHurt: 200
   buttetTemplate: {fileID: 1512598391599361191, guid: 98c3801ce3e7dc94dbec13a1b74025a8,
     type: 3}
   initVector: {x: 10, y: 0, z: 0}
+  side: 1
   status: 0
   maxLow: -2
   maxHight: 3
+--- !u!58 &1817699930004214088
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5400737628529316961}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.052568436, y: 0.11885083}
+  serializedVersion: 2
+  m_Radius: 0.32858074
 --- !u!1 &5400737628560737803
 GameObject:
   m_ObjectHideFlags: 0

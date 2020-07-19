@@ -55,7 +55,7 @@ public class PipelineManger : MonoBehaviour
         // 初始化
         while (true)
         {
-            Debug.Log("GeneratePipelines " + pipelines.ToString());
+            // Debug.Log("GeneratePipelines " + pipelines.ToString());
             if (pipelines.Count < 4)
             {
                 pipelines.AddFirst(GeneratePipeline().GetComponent<Pipeline>());             

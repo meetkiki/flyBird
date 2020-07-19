@@ -47,9 +47,10 @@ public class Game : MonoBehaviour
         this.Score += score;
     }
 
-    private void Player_onDeath()
+    private void Player_onDeath(Bird bird)
     {
         this.status = GameStatus.GAME_OVER;
+        Destroy(this.player.gameObject, 0.2f);
         pipelineManger.stopRun();
         birdManager.stopRun();
     }
@@ -65,7 +66,7 @@ public class Game : MonoBehaviour
     {
         this.Score = 0;
         this.status = GameStatus.IN_GAME;
-        Debug.Log(string.Format("start Game ... {0}", this.Status.ToString()));
+        // Debug.Log(string.Format("start Game ... {0}", this.Status.ToString()));
         pipelineManger.startRun();
         birdManager.startRun();
         player.updateStatus(Player.BirdStatus.FLY);

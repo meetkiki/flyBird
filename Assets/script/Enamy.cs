@@ -1,7 +1,5 @@
 ﻿using Assets.script;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
 public class Enamy : Bird
@@ -9,7 +7,6 @@ public class Enamy : Bird
 
     public float maxLow = -2;
     public float maxHight = 3;
-
     public override void Start()
     {
         init();
@@ -45,9 +42,9 @@ public class Enamy : Bird
         this.status = BirdStatus.DIE;
     }
 
-
-    public override bool checkDie(Buttet buttet)
+    public override bool checkShot(Buttet buttet)
     {
         return buttet.side == Side.PLAYER;
     }
+
 }

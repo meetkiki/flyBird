@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ public class BirdManager : MonoBehaviour
 
     private LinkedList<Bird> birds = new LinkedList<Bird>();
 
-    Coroutine coroutine;
+    private Coroutine coroutine;
 
     public void startRun()
     {
@@ -47,7 +48,9 @@ public class BirdManager : MonoBehaviour
         {
             if (birds.Count <= maxCount)
             {
-                birds.AddFirst(GenerateBird().GetComponent<Bird>());
+                Bird bird = GenerateBird().GetComponent<Bird>();
+                birds.AddFirst(bird);
+                bird.onDeath += bird_onDeath;
             }
             else
             {
@@ -64,6 +67,12 @@ public class BirdManager : MonoBehaviour
         }
     }
 
+    private void bird_onDeath(Bird bird)
+    {
+        // Debug.Log("bird_onDeath bird with " + bird.name);
+        Destroy(bird.gameObject, 0.2f);
+        this.birds.Remove(bird);
+    }
 
     GameObject GenerateBird()
     {
